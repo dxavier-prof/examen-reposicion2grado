@@ -1,0 +1,500 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Examen de Agudas y Graves</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Concepto: una hoja de cuaderno rayado con margen rojo. El tren de sílabas es el hilo de la prueba y la nota final aparece como la marca en tinta roja de la maestra. */
+:root{
+  --bg:#E8EEF5; --paper:#FFFFFF; --line:#DCE7F3; --margin:#F2A4A9; --border:#B7C4D6;
+  --ink:#1B2740; --muted:#55627A;
+  --aguda:#CF2E3A; --on-aguda:#FFFFFF; --aguda-soft:#FDE7E9;
+  --grave:#2461D4; --on-grave:#FFFFFF; --grave-soft:#E2ECFD;
+  --sun:#FFD43B; --on-sun:#3F3200; --tip-bg:#FFF6CC; --tip-edge:#D9B800;
+  --ok:#14794F; --ok-soft:#DDF3E8; --warn:#9A5200; --warn-soft:#FDEFD3;
+  --btn:#1B2740; --on-btn:#FFFFFF;
+  --font-body:"Andika","Trebuchet MS",system-ui,sans-serif;
+  --font-hand:"Caveat","Segoe Script","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10151D; --paper:#1A212C; --line:#263243; --margin:#7B3A42; --border:#3C4A5E;
+    --ink:#EDF1F7; --muted:#A3AEC0;
+    --aguda:#FF7078; --on-aguda:#2A0709; --aguda-soft:#3A1A1E;
+    --grave:#79AEFF; --on-grave:#06172E; --grave-soft:#16294A;
+    --sun:#FFD43B; --on-sun:#3F3200; --tip-bg:#2F2A12; --tip-edge:#8F7A12;
+    --ok:#52C98F; --ok-soft:#173528; --warn:#F2B25C; --warn-soft:#38290F;
+    --btn:#EDF1F7; --on-btn:#10151D;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10151D; --paper:#1A212C; --line:#263243; --margin:#7B3A42; --border:#3C4A5E;
+  --ink:#EDF1F7; --muted:#A3AEC0;
+  --aguda:#FF7078; --on-aguda:#2A0709; --aguda-soft:#3A1A1E;
+  --grave:#79AEFF; --on-grave:#06172E; --grave-soft:#16294A;
+  --sun:#FFD43B; --on-sun:#3F3200; --tip-bg:#2F2A12; --tip-edge:#8F7A12;
+  --ok:#52C98F; --ok-soft:#173528; --warn:#F2B25C; --warn-soft:#38290F;
+  --btn:#EDF1F7; --on-btn:#10151D;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:18px; line-height:1.5;
+  padding-block:20px 130px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--grave);outline-offset:2px}
+h1,h2{margin:0;line-height:1.15;text-wrap:balance}
+h1{font-size:2rem}
+h2{font-size:1.5rem}
+p{margin:0}
+
+.sheet{
+  position:relative; max-width:720px; margin:0 auto; border:2px solid var(--border); border-radius:6px;
+  background-color:var(--paper);
+  background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,var(--line) 31px,var(--line) 32px);
+  padding:20px 16px 28px 52px; min-width:0;
+}
+.sheet::before{content:"";position:absolute;top:0;bottom:0;left:36px;width:2px;background:var(--margin)}
+@media (max-width:520px){
+  .sheet{padding-left:34px;padding-right:12px}
+  .sheet::before{left:22px}
+  h1{font-size:1.65rem}
+}
+.stack{display:flex;flex-direction:column;gap:16px;min-width:0}
+.card{background:var(--paper);border:2px solid var(--border);border-radius:8px;padding:16px;min-width:0}
+.eyebrow{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.muted{color:var(--muted)}
+.hand{font-family:var(--font-hand)}
+
+/* botones */
+.btn{min-height:56px;padding:0 24px;border-radius:12px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);font-weight:700;font-size:1.05rem}
+.btn.primary{background:var(--btn);color:var(--on-btn)}
+.btn[disabled]{opacity:.38;cursor:not-allowed}
+.btn.wide{width:100%}
+.linkbtn{background:none;border:0;padding:6px 4px;color:var(--grave);font-weight:700;text-decoration:underline;font-size:.95rem}
+.listen{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:10px;border:2px solid var(--border);background:var(--paper);font-weight:700;font-size:.95rem}
+.listen svg{width:22px;height:22px;flex:none}
+
+/* inicio */
+.hdr-fields{display:flex;gap:18px;align-items:flex-end;flex-wrap:wrap}
+.field{display:flex;flex-direction:column;gap:2px;flex:1 1 240px;min-width:0}
+.field label{font-size:.85rem;font-weight:700;color:var(--muted)}
+.field input{font:inherit;font-size:1.3rem;font-weight:700;color:var(--ink);background:var(--paper);border:0;border-bottom:3px solid var(--ink);padding:8px 4px;border-radius:0;width:100%}
+.field input::placeholder{color:var(--muted);font-weight:400}
+.rules{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.legend{display:flex;gap:10px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:999px;font-weight:700;font-size:.95rem;border:2px solid}
+.pill.aguda{color:var(--aguda);border-color:var(--aguda);background:var(--aguda-soft)}
+.pill.grave{color:var(--grave);border-color:var(--grave);background:var(--grave-soft)}
+
+/* encabezado de pregunta */
+.top{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.qn{font-weight:700}
+.segs{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.seg{height:10px;border-radius:3px;background:var(--border);opacity:.55}
+.seg.done{background:var(--ink);opacity:1}
+.seg.now{background:var(--sun);opacity:1;outline:2px solid var(--ink);outline-offset:1px}
+
+.ins{font-weight:700}
+.step{display:flex;gap:10px;align-items:flex-start}
+.step b.n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:.9rem;margin-top:1px}
+.tip{background:var(--tip-bg);border:2px dashed var(--tip-edge);border-radius:8px;padding:10px 14px;font-size:.95rem;display:flex;flex-direction:column;gap:4px}
+.tip b.a{color:var(--aguda)} .tip b.g{color:var(--grave)}
+.needs{font-size:.9rem;color:var(--muted)}
+
+/* tren */
+.wordline{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bigword{font-size:2.4rem;font-weight:700;line-height:1.1;letter-spacing:.02em}
+.train{display:flex;align-items:flex-start;gap:0;padding:6px 0 4px;min-width:0}
+.loco{flex:0 0 78px;width:78px;height:78px}
+.link{flex:0 0 12px;height:6px;background:var(--ink);margin-top:44px;display:block}
+.car{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:20px}
+.car small{font-size:.8rem;font-weight:700;color:var(--muted);min-height:1.2em;text-align:center}
+.wagon{
+  position:relative;width:100%;height:68px;border:3px solid var(--ink);border-radius:10px;
+  background:var(--paper);display:grid;place-items:center;font-size:1.9rem;font-weight:700;color:var(--ink);padding:0;
+}
+.wagon::before,.wagon::after{content:"";position:absolute;bottom:-14px;width:22px;height:22px;border-radius:50%;background:var(--sun);border:4px solid var(--ink)}
+.wagon::before{left:14%} .wagon::after{right:14%}
+.wagon.sel{background:var(--sun);color:var(--on-sun)}
+.wagon.sel.aguda{background:var(--aguda);color:var(--on-aguda);border-color:var(--aguda)}
+.wagon.sel.grave{background:var(--grave);color:var(--on-grave);border-color:var(--grave)}
+.wagon.sel.aguda::before,.wagon.sel.aguda::after,.wagon.sel.grave::before,.wagon.sel.grave::after{border-color:var(--ink)}
+
+.kinds{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:420px){.kinds{grid-template-columns:1fr}}
+.kind{min-height:64px;border-radius:12px;border:3px solid;background:var(--paper);font-weight:700;font-size:1.25rem;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 10px;gap:0;line-height:1.2}
+.kind small{font-size:.78rem;font-weight:400;color:var(--muted)}
+.kind.aguda{border-color:var(--aguda);color:var(--aguda)}
+.kind.grave{border-color:var(--grave);color:var(--grave)}
+.kind[aria-pressed="true"].aguda{background:var(--aguda);color:var(--on-aguda)}
+.kind[aria-pressed="true"].grave{background:var(--grave);color:var(--on-grave)}
+.kind[aria-pressed="true"] small{color:inherit}
+.kind.sm{min-height:52px;font-size:1.05rem;padding:6px 14px}
+
+/* cuento */
+.story{font-size:1.15rem;line-height:1.8}
+.story mark{background:linear-gradient(transparent 55%,var(--sun) 55%);color:inherit;font-weight:700;padding:0 2px}
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px 14px;flex-wrap:wrap;border-top:2px solid var(--line);padding-top:10px}
+.row:first-child{border-top:0;padding-top:0}
+.w{font-size:1.6rem;font-weight:700;min-width:5.5ch}
+.w.aguda{color:var(--aguda)} .w.grave{color:var(--grave)}
+.mini{display:flex;gap:10px}
+
+/* elegir */
+.pick{display:flex;flex-direction:column;gap:10px;border-top:2px solid var(--line);padding-top:14px}
+.pick:first-child{border-top:0;padding-top:0}
+.sent{font-size:1.2rem;line-height:1.7}
+.slot{display:inline-block;min-width:5.5ch;border-bottom:3px solid var(--ink);text-align:center;font-weight:700;padding:0 6px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{min-height:60px;border-radius:12px;border:3px solid var(--ink);background:var(--paper);font-weight:700;font-size:1.45rem;padding:6px 10px}
+.opt[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.lab{font-size:.85rem;font-weight:700;color:var(--muted)}
+
+/* oraciones */
+.build{display:flex;flex-direction:column;gap:12px;border-top:2px solid var(--line);padding-top:14px}
+.build:first-child{border-top:0;padding-top:0}
+.slots{min-height:68px;border-bottom:3px solid var(--ink);display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:6px 0}
+.ph{color:var(--muted)}
+.dot{font-size:1.5rem;font-weight:700}
+.bank{display:flex;gap:10px;flex-wrap:wrap}
+.chip{min-height:52px;padding:0 18px;border-radius:10px;border:3px solid var(--grave);background:var(--grave-soft);color:var(--ink);font-weight:700;font-size:1.25rem;display:inline-flex;align-items:center}
+.chip.placed{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip.ghost{visibility:hidden}
+
+/* barra inferior */
+.nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--paper);border-top:2px solid var(--border);
+  padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+}
+.nav .in{max-width:720px;margin:0 auto;display:flex;gap:12px}
+.nav .btn{flex:1}
+.nav .btn.primary{flex:2}
+
+/* resultados */
+.grade{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.circle{
+  flex:none;width:170px;height:140px;border:6px solid var(--aguda);color:var(--aguda);border-radius:50%;
+  display:grid;place-items:center;transform:rotate(-6deg);font-family:var(--font-hand);font-weight:700;line-height:1;
+  background:var(--paper)
+}
+.circle .num{font-size:5.4rem;display:block}
+.circle .of{font-size:1.6rem;display:block;margin-top:-6px;text-align:center}
+.who{display:flex;flex-direction:column;gap:2px;min-width:0}
+.who .name{font-size:1.5rem;font-weight:700;overflow-wrap:anywhere}
+.msg{font-size:1.2rem;font-weight:700}
+.review{display:flex;flex-direction:column;gap:0}
+.rv{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:start;padding:12px 0;border-top:2px solid var(--line)}
+.rv:first-child{border-top:0}
+.rv .n{font-weight:700;width:2.2ch}
+.rv .t{font-weight:700;min-width:0}
+.rv .s{grid-column:2 / 4;font-size:.95rem;color:var(--muted);overflow-wrap:anywhere}
+.badge{font-size:.85rem;font-weight:700;padding:2px 10px;border-radius:999px;white-space:nowrap}
+.badge.ok{background:var(--ok-soft);color:var(--ok)}
+.badge.mid,.badge.low{background:var(--warn-soft);color:var(--warn)}
+.repaso{margin:0;padding-left:1.2em}
+.copybox{width:100%;font:inherit;font-size:.95rem;padding:10px;border:2px solid var(--border);background:var(--paper);color:var(--ink);border-radius:8px}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.actions .btn{flex:1 1 200px}
+
+@media (prefers-reduced-motion:no-preference){
+  .wagon,.opt,.kind,.chip{transition:background-color .15s,color .15s,border-color .15s}
+}
+</style>
+
+<div id="app"></div>
+
+<script>
+const app = document.getElementById('app');
+const CAN_SPEAK = typeof window !== 'undefined' && 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+const KIND = { aguda: 'aguda', grave: 'grave' };
+const STORY = 'El ratón Pérez vive en una casa bonita. Un día guardó un botón en su móvil y comió un rico pan. Su amigo el árbol lo miraba desde el jardín.';
+
+const BASE = [
+  { type: 'train', sec: 'El tren de las sílabas', word: 'mesa', syl: ['me', 'sa'], tonic: 0 },
+  { type: 'train', sec: 'El tren de las sílabas', word: 'ratón', syl: ['ra', 'tón'], tonic: 1 },
+  { type: 'train', sec: 'El tren de las sílabas', word: 'lápiz', syl: ['lá', 'piz'], tonic: 0 },
+  { type: 'train', sec: 'El tren de las sílabas', word: 'mamá', syl: ['ma', 'má'], tonic: 1 },
+  { type: 'train', sec: 'El tren de las sílabas', word: 'árbol', syl: ['ár', 'bol'], tonic: 0 },
+  { type: 'story', sec: 'Detectives de palabras', words: ['ratón', 'casa', 'botón', 'móvil', 'árbol'],
+    kinds: { 'ratón': 'aguda', 'casa': 'grave', 'botón': 'aguda', 'móvil': 'grave', 'árbol': 'grave' } },
+  { type: 'pick', sec: 'Detectives de palabras', items: [
+    { n: 1, before: 'Mi', after: 'me compró un helado de fresa.', opts: ['papa', 'papá'], ok: 'papá' },
+    { n: 2, before: 'Yo', after: 'una canción alegre en la escuela.', opts: ['canto', 'cantó'], ok: 'canto' } ] },
+  { type: 'pick', sec: 'Detectives de palabras', items: [
+    { n: 3, before: 'El ave voló alto y', after: 'en la rama.', opts: ['poso', 'posó'], ok: 'posó' },
+    { n: 4, before: 'Escribo la tarea con mi', after: '.', opts: ['lápiz', 'lapiz'], ok: 'lápiz' } ] },
+  { type: 'tilde', sec: 'Tildes y oraciones', items: [
+    { opts: ['corazon', 'corazón'], ok: 'corazón' },
+    { opts: ['facil', 'fácil'], ok: 'fácil' },
+    { opts: ['manzana', 'mánzana'], ok: 'manzana' },
+    { opts: ['perdon', 'perdón'], ok: 'perdón' } ] },
+  { type: 'build', sec: 'Tildes y oraciones', items: [
+    { words: ['mi', 'mamá', 'comió', 'una', 'manzana'], valid: ['mi mamá comió una manzana', 'una manzana comió mi mamá'] },
+    { words: ['pedí', 'perdón', 'a', 'mi', 'amigo'], valid: ['pedí perdón a mi amigo', 'a mi amigo pedí perdón'] } ] }
+];
+const TITLES = { train: 'Busca la sílaba fuerte', story: 'Detective de palabras', pick: 'Elige la palabra correcta', tilde: 'Ponle la tilde', build: 'Arma la oración' };
+const GROUPS = [
+  { name: 'El tren de las sílabas', qs: [0, 1, 2, 3, 4] },
+  { name: 'Detectives de palabras', qs: [5, 6, 7] },
+  { name: 'Tildes y oraciones', qs: [8, 9] }
+];
+
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const fmt = n => (Number.isInteger(n) ? String(n) : n.toFixed(1));
+function shuffle(a) { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; }
+
+function freshQuestions() {
+  return BASE.map(q => {
+    const c = JSON.parse(JSON.stringify(q));
+    if (c.type === 'pick' || c.type === 'tilde') c.items.forEach(it => { it.opts = shuffle(it.opts); });
+    if (c.type === 'build') c.items.forEach(it => { let b; do { b = shuffle(it.words); } while (b.join(' ') === it.words.join(' ')); it.bank = b; });
+    return c;
+  });
+}
+function initAns(q) {
+  if (q.type === 'train') return { sel: null, kind: null };
+  if (q.type === 'story') return { kinds: {} };
+  if (q.type === 'pick' || q.type === 'tilde') return { c: [] };
+  return { w: q.items.map(() => []) };
+}
+function kindOf(q) { return q.tonic === q.syl.length - 1 ? 'aguda' : 'grave'; }
+
+function isComplete(q, a) {
+  if (q.type === 'train') return a.sel !== null && !!a.kind;
+  if (q.type === 'story') return q.words.every(w => a.kinds[w]);
+  if (q.type === 'pick' || q.type === 'tilde') return q.items.every((_, i) => !!a.c[i]);
+  return q.items.every((it, i) => a.w[i].length === it.words.length);
+}
+/* puntos en centésimas: cada pregunta vale 100 */
+function scoreQ(q, a) {
+  let p = 0;
+  if (q.type === 'train') { if (a.sel === q.tonic) p += 50; if (a.kind === kindOf(q)) p += 50; }
+  else if (q.type === 'story') { q.words.forEach(w => { if (a.kinds[w] === q.kinds[w]) p += 20; }); }
+  else if (q.type === 'pick') { q.items.forEach((it, i) => { if (a.c[i] === it.ok) p += 50; }); }
+  else if (q.type === 'tilde') { q.items.forEach((it, i) => { if (a.c[i] === it.ok) p += 25; }); }
+  else if (q.type === 'build') { q.items.forEach((it, i) => { const s = a.w[i].map(k => it.bank[k]).join(' '); if (it.valid.includes(s)) p += 50; }); }
+  return p;
+}
+function solutionQ(q) {
+  if (q.type === 'train') return 'Sílaba fuerte: «' + q.syl[q.tonic] + '». Es ' + kindOf(q) + '.';
+  if (q.type === 'story') return q.words.map(w => w + ' (' + q.kinds[w] + ')').join(', ') + '.';
+  if (q.type === 'pick') return q.items.map(it => it.n + '. ' + it.ok).join('   ');
+  if (q.type === 'tilde') return q.items.map(it => it.ok).join(', ') + '.';
+  return q.items.map(it => cap(it.valid[0]) + '.').join(' ');
+}
+function titleQ(q) { return q.type === 'train' ? cap(q.word) : TITLES[q.type]; }
+function sayQ(q) {
+  if (q.type === 'train') return q.word + '. Toca el vagón con la sílaba que suena más fuerte. Después elige si la palabra es aguda o grave.';
+  if (q.type === 'story') return STORY + ' Ahora decide si cada palabra marcada es aguda o grave.';
+  if (q.type === 'pick') return 'Lee cada oración y toca la palabra que va en el espacio.';
+  if (q.type === 'tilde') return 'Toca la palabra que está bien escrita.';
+  return 'Toca las palabras en orden para armar cada oración.';
+}
+function result() {
+  const pts = S.qs.map((q, i) => scoreQ(q, S.ans[i]));
+  const total = pts.reduce((x, y) => x + y, 0);
+  const nota = Math.max(1, Math.round(total / 10) / 10);
+  return { pts, total, nota };
+}
+function messageFor(n) {
+  if (n >= 9) return '¡Excelente trabajo! Dominas las palabras agudas y graves.';
+  if (n >= 7) return '¡Muy bien! Ya casi lo tienes todo.';
+  if (n >= 5) return 'Buen intento. Con un poco de repaso vas a mejorar.';
+  return 'Sigue practicando. Puedes repetir el examen cuando quieras.';
+}
+
+let S = { screen: 'start', name: '', i: 0, qs: freshQuestions(), ans: [] };
+S.ans = S.qs.map(initAns);
+
+function speak(text) {
+  if (!CAN_SPEAK) return;
+  try {
+    const synth = window.speechSynthesis; synth.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    const vs = synth.getVoices();
+    const v = vs.find(x => /^es[-_](SV|MX|419|US)/i.test(x.lang)) || vs.find(x => /^es/i.test(x.lang));
+    if (v) { u.voice = v; u.lang = v.lang; } else { u.lang = 'es-MX'; }
+    u.rate = 0.85; synth.speak(u);
+  } catch (e) { /* sin voz disponible */ }
+}
+
+const ICON_SPEAKER = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+const LOCO = '<svg class="loco" viewBox="0 0 100 76" aria-hidden="true"><rect x="8" y="26" width="58" height="32" rx="6" fill="var(--ink)"/><rect x="52" y="8" width="42" height="50" rx="6" fill="var(--ink)"/><rect x="61" y="16" width="24" height="17" rx="3" fill="var(--paper)"/><rect x="16" y="10" width="14" height="18" rx="2" fill="var(--ink)"/><rect x="11" y="5" width="24" height="7" rx="3" fill="var(--ink)"/><circle cx="26" cy="62" r="10" fill="var(--sun)" stroke="var(--ink)" stroke-width="4"/><circle cx="54" cy="62" r="10" fill="var(--sun)" stroke="var(--ink)" stroke-width="4"/><circle cx="81" cy="62" r="10" fill="var(--sun)" stroke="var(--ink)" stroke-width="4"/></svg>';
+
+function listenBtn() { return CAN_SPEAK ? '<button class="listen" data-a="listen" type="button">' + ICON_SPEAKER + 'Escuchar</button>' : ''; }
+
+const TIP_BASIC = '<div class="tip"><span><b class="a">Aguda:</b> la fuerza está en la <b>última</b> sílaba.</span><span><b class="g">Grave:</b> la fuerza está en la <b>penúltima</b> sílaba.</span></div>';
+const TIP_TILDE = '<div class="tip"><span><b class="a">Aguda:</b> fuerza en la última sílaba. Lleva tilde si termina en <b>n</b>, <b>s</b> o <b>vocal</b>.</span><span><b class="g">Grave:</b> fuerza en la penúltima sílaba. Lleva tilde si <b>no</b> termina en n, s o vocal.</span></div>';
+
+/* ---------- pantallas ---------- */
+function startHTML() {
+  return '<div class="sheet"><div class="stack">' +
+    '<div class="stack" style="gap:6px"><span class="eyebrow">Segundo grado · Lenguaje</span><h1>Examen de agudas y graves</h1></div>' +
+    '<div class="hdr-fields"><div class="field"><label for="name">Mi nombre</label><input id="name" type="text" autocomplete="off" maxlength="40" placeholder="Escribe aquí" value="' + esc(S.name) + '"></div></div>' +
+    '<div class="card"><ul class="rules"><li>Son 10 preguntas y cada una vale 1 punto.</li><li>Tu nota va del 1 al 10.</li><li>Puedes volver atrás para cambiar una respuesta.</li><li>Toca <b>Escuchar</b> si quieres oír las instrucciones.</li></ul></div>' +
+    '<div class="card stack" style="gap:10px"><span class="eyebrow">Ejemplo</span><div class="train">' + LOCO + '<i class="link"></i>' +
+    '<div class="car"><div class="wagon" style="font-size:1.9rem"><span>ca</span></div><small>&nbsp;</small></div><i class="link"></i>' +
+    '<div class="car"><div class="wagon sel aguda"><span>FÉ</span></div><small>sílaba fuerte</small></div></div>' +
+    '<p><b>café</b> es una palabra <b style="color:var(--aguda)">aguda</b>: la sílaba fuerte es la última.</p>' +
+    '<div class="legend"><span class="pill aguda">Rojo: aguda</span><span class="pill grave">Azul: grave</span></div></div>' +
+    '</div></div>' +
+    '<div class="nav"><div class="in"><button class="btn primary" data-a="start" type="button">Empezar el examen</button></div></div>';
+}
+
+function trainBody(q, a) {
+  const cars = q.syl.map((s, k) => {
+    const sel = a.sel === k;
+    const cls = 'wagon' + (sel ? ' sel' + (a.kind ? ' ' + a.kind : '') : '');
+    return '<div class="car"><button class="' + cls + '" type="button" data-a="wagon" data-k="' + k + '" aria-pressed="' + sel + '"><span>' + esc(s) + '</span></button><small>' + (sel ? 'sílaba fuerte' : '&nbsp;') + '</small></div>';
+  }).join('<i class="link"></i>');
+  const kb = (v, label, hint) => '<button class="kind ' + v + '" type="button" data-a="kind" data-v="' + v + '" aria-pressed="' + (a.kind === v) + '">' + label + '<small>' + hint + '</small></button>';
+  return '<div class="card stack"><div class="wordline"><div class="bigword">' + esc(cap(q.word)) + '</div>' + listenBtn() + '</div>' +
+    '<div class="step"><b class="n">1</b><p class="ins">Toca el vagón con la sílaba que suena más fuerte.</p></div>' +
+    '<div class="train">' + LOCO + '<i class="link"></i>' + cars + '</div>' +
+    '<div class="step"><b class="n">2</b><p class="ins">¿La palabra es aguda o grave?</p></div>' +
+    '<div class="kinds">' + kb('aguda', 'Aguda', 'fuerza en la última') + kb('grave', 'Grave', 'fuerza en la penúltima') + '</div></div>' + TIP_BASIC;
+}
+function storyBody(q, a) {
+  let txt = esc(STORY);
+  q.words.forEach(w => { txt = txt.replace(w, '<mark>' + w + '</mark>'); });
+  const rows = q.words.map(w => {
+    const k = a.kinds[w] || '';
+    const b = (v, l) => '<button class="kind ' + v + ' sm" type="button" data-a="skind" data-w="' + esc(w) + '" data-v="' + v + '" aria-pressed="' + (k === v) + '">' + l + '</button>';
+    return '<div class="row"><span class="w ' + k + '">' + esc(w) + '</span><div class="mini">' + b('aguda', 'Aguda') + b('grave', 'Grave') + '</div></div>';
+  }).join('');
+  return '<div class="card stack"><div class="wordline"><span class="eyebrow">El ratón de la casa</span>' + listenBtn() + '</div><p class="story">' + txt + '</p></div>' +
+    '<div class="card stack"><p class="ins">Decide si cada palabra marcada es aguda o grave.</p><div class="rows">' + rows + '</div></div>' + TIP_BASIC;
+}
+function pickBody(q, a) {
+  const items = q.items.map((it, i) => {
+    const c = a.c[i];
+    const opts = it.opts.map(o => '<button class="opt" type="button" data-a="pick" data-i="' + i + '" data-v="' + esc(o) + '" aria-pressed="' + (c === o) + '">' + esc(o) + '</button>').join('');
+    return '<div class="pick"><p class="sent"><b>' + it.n + '.</b> ' + esc(it.before) + ' <span class="slot">' + (c ? esc(c) : '&nbsp;') + '</span>' + (it.after === '.' ? '.' : ' ' + esc(it.after)) + '</p><div class="opts">' + opts + '</div></div>';
+  }).join('');
+  return '<div class="card stack"><div class="wordline"><p class="ins">Lee cada oración y toca la palabra que va en el espacio.</p>' + listenBtn() + '</div>' + items + '</div>';
+}
+function tildeBody(q, a) {
+  const items = q.items.map((it, i) => {
+    const c = a.c[i];
+    const opts = it.opts.map(o => '<button class="opt" type="button" data-a="pick" data-i="' + i + '" data-v="' + esc(o) + '" aria-pressed="' + (c === o) + '">' + esc(o) + '</button>').join('');
+    return '<div class="pick"><span class="lab">Palabra ' + (i + 1) + '</span><div class="opts">' + opts + '</div></div>';
+  }).join('');
+  return '<div class="card stack"><div class="wordline"><p class="ins">Toca la palabra que está bien escrita.</p>' + listenBtn() + '</div>' + items + '</div>' + TIP_TILDE;
+}
+function buildBody(q, a) {
+  const items = q.items.map((it, i) => {
+    const used = a.w[i];
+    const slots = used.length
+      ? used.map((k, idx) => '<button class="chip placed" type="button" data-a="unplace" data-i="' + i + '" data-k="' + k + '">' + esc(idx === 0 ? cap(it.bank[k]) : it.bank[k]) + '</button>').join('') + (used.length === it.words.length ? '<span class="dot">.</span>' : '')
+      : '<span class="ph">Toca las palabras en orden</span>';
+    const bank = it.bank.map((w, k) => used.includes(k)
+      ? '<span class="chip ghost">' + esc(w) + '</span>'
+      : '<button class="chip" type="button" data-a="place" data-i="' + i + '" data-k="' + k + '">' + esc(w) + '</button>').join('');
+    return '<div class="build"><span class="lab">Oración ' + (i + 1) + '</span><div class="slots" aria-live="polite">' + slots + '</div><div class="bank">' + bank + '</div>' +
+      (used.length ? '<div><button class="linkbtn" type="button" data-a="clear" data-i="' + i + '">Borrar y empezar otra vez</button></div>' : '') + '</div>';
+  }).join('');
+  return '<div class="card stack"><div class="wordline"><p class="ins">Toca las palabras en orden para armar cada oración.</p>' + listenBtn() + '</div>' + items + '</div>';
+}
+
+function questionHTML() {
+  const q = S.qs[S.i], a = S.ans[S.i];
+  const segs = S.qs.map((_, k) => '<span class="seg' + (k < S.i ? ' done' : k === S.i ? ' now' : '') + '"></span>').join('');
+  const body = q.type === 'train' ? trainBody(q, a) : q.type === 'story' ? storyBody(q, a) : q.type === 'pick' ? pickBody(q, a) : q.type === 'tilde' ? tildeBody(q, a) : buildBody(q, a);
+  const ok = isComplete(q, a);
+  const last = S.i === S.qs.length - 1;
+  return '<div class="sheet"><div class="stack">' +
+    '<div class="top"><div class="meta"><span class="qn">Pregunta ' + (S.i + 1) + ' de ' + S.qs.length + '</span><span class="eyebrow">' + esc(q.sec) + '</span></div><div class="segs" aria-hidden="true">' + segs + '</div></div>' +
+    body + (ok ? '' : '<p class="needs">Responde todo lo de esta pregunta para seguir.</p>') +
+    '</div></div>' +
+    '<div class="nav"><div class="in"><button class="btn" type="button" data-a="prev"' + (S.i === 0 ? ' disabled' : '') + '>Atrás</button>' +
+    '<button class="btn primary" type="button" data-a="next"' + (ok ? '' : ' disabled') + '>' + (last ? 'Terminar' : 'Siguiente') + '</button></div></div>';
+}
+
+function resultsHTML() {
+  const r = result();
+  const name = S.name.trim() || 'Estudiante';
+  const date = new Date().toLocaleDateString('es-SV', { day: 'numeric', month: 'long', year: 'numeric' });
+  const rows = S.qs.map((q, i) => {
+    const p = r.pts[i];
+    const cls = p === 100 ? 'ok' : p > 0 ? 'mid' : 'low';
+    const lab = p === 100 ? 'Correcta' : p > 0 ? 'Casi' : 'Por repasar';
+    return '<div class="rv"><span class="n">' + (i + 1) + '</span><span class="t">' + esc(titleQ(q)) + '</span><span class="badge ' + cls + '">' + lab + ' · ' + fmt(p / 100) + ' / 1</span><span class="s">' + esc(solutionQ(q)) + '</span></div>';
+  }).join('');
+  const weak = GROUPS.filter(g => g.qs.reduce((s, k) => s + r.pts[k], 0) / (g.qs.length * 100) < 0.7).map(g => g.name);
+  return '<div class="sheet"><div class="stack">' +
+    '<div class="stack" style="gap:6px"><span class="eyebrow">Resultado del examen</span><h1>Examen de agudas y graves</h1></div>' +
+    '<div class="grade"><div class="circle" role="img" aria-label="Nota ' + fmt(r.nota) + ' de 10"><span><span class="num">' + fmt(r.nota) + '</span><span class="of">de 10</span></span></div>' +
+    '<div class="who"><span class="lab">Nombre</span><span class="name">' + esc(name) + '</span><span class="muted">' + esc(date) + '</span><p class="msg" style="margin-top:8px">' + esc(messageFor(r.nota)) + '</p></div></div>' +
+    (weak.length ? '<div class="card stack" style="gap:6px"><span class="eyebrow">Para repasar</span><ul class="repaso">' + weak.map(w => '<li>' + esc(w) + '</li>').join('') + '</ul></div>' : '') +
+    '<div class="card"><div class="review">' + rows + '</div></div>' +
+    '<div id="copyarea"></div>' +
+    '<div class="actions"><button class="btn primary" type="button" data-a="copy">Copiar resultado</button><button class="btn" type="button" data-a="retry">Repetir el examen</button></div>' +
+    '</div></div>';
+}
+
+function draw(keepScroll) {
+  const y = typeof window !== 'undefined' ? (window.scrollY || 0) : 0;
+  app.innerHTML = S.screen === 'start' ? startHTML() : S.screen === 'q' ? questionHTML() : resultsHTML();
+  if (typeof window !== 'undefined' && window.scrollTo) window.scrollTo(0, keepScroll ? y : 0);
+}
+
+/* ---------- eventos ---------- */
+app.addEventListener('input', e => { if (e.target && e.target.id === 'name') S.name = e.target.value; });
+app.addEventListener('click', e => {
+  const t = e.target.closest('[data-a]'); if (!t) return;
+  const act = t.dataset.a;
+  const q = S.qs[S.i], a = S.ans[S.i];
+  const i = +t.dataset.i, k = +t.dataset.k;
+  if (act === 'start') { S.screen = 'q'; S.i = 0; draw(); return; }
+  if (act === 'listen') { speak(sayQ(q)); return; }
+  if (act === 'prev') { if (S.i > 0) { S.i--; draw(); } return; }
+  if (act === 'next') {
+    if (!isComplete(q, a)) return;
+    if (S.i < S.qs.length - 1) { S.i++; draw(); } else { S.screen = 'r'; draw(); }
+    return;
+  }
+  if (act === 'retry') { S = { screen: 'start', name: S.name, i: 0, qs: freshQuestions(), ans: [] }; S.ans = S.qs.map(initAns); draw(); return; }
+  if (act === 'copy') { copyResult(); return; }
+  if (act === 'wagon') a.sel = k;
+  else if (act === 'kind') a.kind = t.dataset.v;
+  else if (act === 'skind') a.kinds[t.dataset.w] = t.dataset.v;
+  else if (act === 'pick') a.c[i] = t.dataset.v;
+  else if (act === 'place') { if (!a.w[i].includes(k)) a.w[i].push(k); }
+  else if (act === 'unplace') a.w[i] = a.w[i].filter(x => x !== k);
+  else if (act === 'clear') a.w[i] = [];
+  else return;
+  draw(true);
+});
+
+function copyResult() {
+  const r = result();
+  const name = S.name.trim() || 'Estudiante';
+  const date = new Date().toLocaleDateString('es-SV', { day: 'numeric', month: 'long', year: 'numeric' });
+  const text = 'Examen de agudas y graves (Segundo grado, Lenguaje)\nNombre: ' + name + '\nFecha: ' + date + '\nNota: ' + fmt(r.nota) + ' / 10';
+  const showBox = () => {
+    const el = document.getElementById('copyarea');
+    if (!el) return;
+    el.innerHTML = '<textarea class="copybox" id="copybox" rows="4" readonly></textarea>';
+    const box = document.getElementById('copybox'); box.value = text; box.focus(); box.select();
+  };
+  try {
+    navigator.clipboard.writeText(text).then(() => {
+      const el = document.getElementById('copyarea');
+      if (el) el.innerHTML = '<p class="msg" role="status" style="color:var(--ok)">Resultado copiado.</p>';
+    }, showBox);
+  } catch (err) { showBox(); }
+}
+
+draw();
+</script>
+
+</body></html>
